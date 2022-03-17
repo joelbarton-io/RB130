@@ -1,3 +1,4 @@
+# frozen string literal
 
 # def test
 #   puts 'entering method'
@@ -75,7 +76,6 @@ the argument into a block. (how?)
 when ruby sees a `&` prepended to a method parameter within a method definition, it
 calls `to_proc` on the object referenced by that method parameter
 - must pass a block
-
 =end
 
 # def a_method(arr) # all methods can take take blocks as arguments (explicitly or implicitly)
@@ -83,18 +83,19 @@ calls `to_proc` on the object referenced by that method parameter
 #   arr.each { |el| yield(el) }
 # end
 
-a_method([1, 2, 3]) { |el| puts el ** 2 }
+# a_method([1, 2, 3]) { |el| puts el ** 2 }
 
-class Person
-  def initialize(name, age)
-    @name = name
-    @age  = age
-  end
 
-  def make_a_proc
-    Proc.new
-  end
-end
+# class Person
+#   def initialize(name, age)
+#     @name = name
+#     @age  = age
+#   end
+
+#   def make_a_proc
+#     Proc.new
+#   end
+# end
 
 # jesse = Person.new("Jesse Pinkman", 25)
 
@@ -108,6 +109,5 @@ end
 
 # proc = proc_from { "hello" }
 
-# proc.call   #=> "hello"
-
-
+## proc.call   #=> "hello"
+class Person; end
