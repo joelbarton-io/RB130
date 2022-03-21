@@ -27,6 +27,3 @@ end
 
 proc_obj.() # Proc#call invoked upon the Proc obj
 
-[].each do
-
-end
