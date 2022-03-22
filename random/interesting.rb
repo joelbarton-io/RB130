@@ -155,7 +155,7 @@ calls `to_proc` on the object referenced by that method parameter
 
 
 
-# --------------------- for Chris ---------------------
+# ---------------------for Chris---------------------
 # without running the code; explain the steps to the resulting output.
 # def a_method(a_proc)
 #   inner_proc = proc { |el| puts el }
@@ -167,7 +167,7 @@ calls `to_proc` on the object referenced by that method parameter
 
 
 
-# --------------------- for Chris ---------------------
+# -------------------------for Chris------------------------
 
 # def main_method(a_proc)
 #   inner_proc = proc { |el| puts el }
@@ -185,25 +185,58 @@ calls `to_proc` on the object referenced by that method parameter
 
 # main_method(outer_proc)
 
-# ----------------------------------------------------
-var = 'initialized before block/proc!'
-prc = proc { a_method other_method var } # what is
+# -------------------closure demonstration-------------------
 
-def call_proc(&proc_obj)
-  yield
-  proc_obj.call
-end
 
-var = 'reassigning the variable...'
 
-def a_method(arg)
-  puts arg
-end
+# var = 'initialized before block/proc!'
+# prc = proc { a_method other_method var } # what is going on here?
 
-def other_method(arg)
-  (arg * 3)
-end
+# def call_proc(&proc_obj)
+#   yield
+#   proc_obj.call
+# end
 
-call_proc(&prc)
+# var = 'reassigning the variable...'
+
+# def a_method(arg)
+#   puts arg
+# end
+
+# def other_method(arg)
+#   (arg * 3)
+# end
+
+# call_proc(&prc)
+
+# var = 'reassigned???'
 
 # what happens if we move our `other_method` definition down here?
+
+
+
+# -------------------do...while w/ pry------------------- #
+
+# require 'pry'
+# str = '1'
+
+# puts str
+
+# loop do
+#   str += str[0]
+#   binding.pry
+#   break if str.size > 10
+# end
+
+# puts str
+
+
+# -------------------explicit/implicit block passing------------------- #
+                            # named parameter to reference the block being passed to the method
+def a_method(word)#, &block)  # converts the block to a simple proc obj (thus `call`-able)
+  yield(word)               # we can still use `yield` with our explicit block converted to a proc!
+  # block.call(word * 3)          # `call`-ing our proc obj
+  yield(word)
+end
+
+a_method('hi') { |arg| puts arg }

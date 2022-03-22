@@ -1,10 +1,10 @@
 # material
 
 - [D] read study guide
-- [] read Regex book/take down some notes
-- [] finish med exercises; practice using pedac
+- [D] read Regex book/take down some notes
+- [P] finish med exercises; practice using pedac
 
-- [] start challenges; live, timed
+- [D] start challenges; live, timed
   - skills being developed:
     - problem solving with code
     - refactoring
@@ -20,18 +20,18 @@
 - [] read chapter on procs/lambdas in TRPL
 - [] read blogs + forum post on as many subjects as possible
 - [] re-read Core Tools book
-- [] re-read blocks/procs refresher
+- [D] re-read blocks/procs refresher
 
 - [] revisit `todolist` project file; esp. how testing works (patterns)
 
 # misc
 
-- [] Gatsby seminar 3-16
+- [X] Gatsby seminar 3-16
 
 # sessions
 
-- [] study with Garry 3-15
-- [] study with Arsema and James 3-15
-- [] study with Chris 3-16
+- [D] study with Garry 3-15
+- [D] study with Arsema and James 3-15
+- [D] study with Chris 3-16
 - [] study with Steve 3-17
 - [] study with others...
