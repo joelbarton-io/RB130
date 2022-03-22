@@ -1,4 +1,4 @@
-require 'irb'
+require 'pry'
 # frozen string literal
 
 # def test
@@ -232,11 +232,26 @@ calls `to_proc` on the object referenced by that method parameter
 
 
 # -------------------explicit/implicit block passing------------------- #
-                            # named parameter to reference the block being passed to the method
-def a_method(word)#, &block)  # converts the block to a simple proc obj (thus `call`-able)
-  yield(word)               # we can still use `yield` with our explicit block converted to a proc!
-  # block.call(word * 3)          # `call`-ing our proc obj
-  yield(word)
-end
+                              # named parameter to reference the block being passed to the method
+# def a_method(word)#, &block)  # converts the block to a simple proc obj (thus `call`-able)
+#   yield(word)                 # we can still use `yield` with our explicit block converted to a proc!
+#   # block.call(word * 3)      # `call`-ing our proc obj
+#   yield(word)
+# end
 
-a_method('hi') { |arg| puts arg }
+# a_method('hi') { |arg| puts arg }
+
+
+
+
+
+
+
+
+# -------------------explicit/implicit block passing------------------- #
+count = 0
+
+loop do
+  count += 1
+  binding.pry
+end

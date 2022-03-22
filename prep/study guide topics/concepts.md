@@ -23,8 +23,10 @@
 
 # questions
 
-- **What are closures?**
+- **What is closure?**
   - *"a technique for implementing lexically scoped name binding"*
+
+- **What are closures?**
   - *"a piece of code that carries its creation context around with it"*
 
   - implemented through the use of blocks and proc objects
@@ -57,7 +59,7 @@
 - **How do we specify a block argument explicitly?**
   - unary `&` in the method definition; passed as the last argument to a method (a must!)
 - **How can we return a Proc from a method or block?**
-  - have that proc object or a reference be the last line of code evaluated within a method implementation
+  - have that proc object or some reference be the last line of code evaluated within a method implementation
 - **What is arity? What kinds of things in Ruby exhibit arity? Give explicit examples.**
   - the level of strictness with which a method's parameter/argument count is enforced.  Strict arity (lambdas, methods) requires that the number of arguments used to invoke a method match the number that the method/lambda was defined to take.  Lenient arity (blocks/procs) let things play out; they can still be used/invoked without the correct number of arguments.  If a block parameter isn't passed but it is referenced in the block/proc implementation, it just points at `nil`
 - **How do methods and blocks return chunks of code (closures)?**
@@ -66,7 +68,8 @@
   - if the method definition includes the `yield` keyword and we don't pass that method a block to yield to, a `LocalJumpError` exception will be thrown, breaking our code.  By using `block_given?` we can prevent this exeception from being thrown by letting the specific details of the method's invocation--whether or not it was passed a block--determine how the method is implemented.  It affords flexibility in both invocation and implementation.
 - **What's the relationship between the Bundler gem and a project's Gemfile?**
   - the Gemfile is where we specify the gems we are planning to use along with a source and a ruby version for the directory within which the file exists.  Bundler uses the gemfile to establish the development environment: downloading/updating gems, ensuring everything talks to everything else, as well as generating a Gemlockfile that goes into more detail re: dependancies/version/etc.
-- **Are there advantages to using the unary `&` when invoking a method with a block over just creating a proc object and passing it as a normal parameter (e.g. not prefixed by `&`)?**
+- **Are there advantages to using the unary `&` when invoking a method with a block over just creating a proc object and passing it as a normal parameter (e.g. not prefixed by `&`)?  Explore the possible trade-offs with a code example.**
+
 # blocks
 - ~ to anonymous functions;
 # closures
