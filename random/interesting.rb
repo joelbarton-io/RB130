@@ -243,15 +243,132 @@ calls `to_proc` on the object referenced by that method parameter
 
 
 
+# -------------------pry practice------------------- #
+# count = 0
+
+# loop do
+#   count += 1
+#   count.times { puts 'hi!' }
+#   binding.pry
+# end
+
+# [1, 2].each do |el|
+#   puts el
+# end
 
 
 
+# -------------------for chris------------------- #
+
+=begin
+What core computer science concept affords us the ability to both reference and access the value
+of a local variable initialized within the scope of a method *after* a method has returned?
+Demonstrate the concept with a code example.
+=end
+
+# def math_operation(n)
+#   # since the proc obj uses `n`; the variable name + it's current value
+#   lambda { |*data| data.collect { |el| el ** n } }
+# end
+
+# square = math_operation(2) # both return lambdas
+# cube   = math_operation(3)
+
+# p square.call 1, 2, 3, 4, 5
+# p cube.call 1, 2, 3, 4, 5
 
 
-# -------------------explicit/implicit block passing------------------- #
-count = 0
 
-loop do
-  count += 1
-  binding.pry
+# -------------------bindings------------------- #
+
+
+# def math_operation(n)
+#   m = 3
+#   lambda { |l| l + m + n }
+# end
+
+# square = math_operation(2)
+
+# p square.binding.eval("n")
+# p square.binding.eval("m")
+# # p square.binding.eval("l") # will this work? how can we verify without running the code?
+# p square.binding.local_variables
+# p square.call(8)
+# # p square.binding.eval("l") # how about now?
+
+
+
+# -------------------bindings------------------- #
+
+# array = [1, 2, 3]
+
+# def a_method(arr)
+#   proc { |arr| arr.collect! { |n| n ** 2 }} # returns proc obj
+# end
+
+# my_proc = a_method(array)
+
+# p my_proc.binding.eval('arr') # => current value of method param `arr`
+
+# my_proc.call(array)
+
+# p my_proc.binding.eval('arr')
+
+
+# -------------------bindings------------------- #
+
+# def a_method(&a) # & converts `a` to a simple procedure object
+#   a.class
+# end
+
+# a = proc { nil } # initializing a proc
+
+# p a_method(&a) # & converts `a` to a block
+
+
+
+# -------------------method object------------------- #
+
+# def a_method(fn)
+#   arg = 'hello!'
+#   my_proc = method(fn.to_sym).to_proc # creates a Method object; converts that object to a proc
+#   proc { arg }
+# end
+
+# def greet(el)
+#   puts el
+# end
+
+# str = 'greet'
+
+# something = a_method(str)
+# p something.call
+# p something.binding.local_variables
+# my_proc.call('hi')
+
+# -------------------eval/returning lambdas------------------- #
+
+# def multiply_by(n)
+#   n = 9
+#   lambda { |data| data.collect { |x| x * n } }
+# end
+
+# doubler = multiply_by(2)
+# tripler = multiply_by(3)
+
+# doubler.binding.eval("n = 2")
+# p doubler.call([1, 2, 3])
+# p tripler[[1, 2, 3]]
+
+
+# -------------------returning a block------------------- #
+
+def block_returner(string)
+  proc { puts string }
 end
+
+string = "I'm in a block!"
+
+my_proc = block_returner(string)
+
+my_proc.call

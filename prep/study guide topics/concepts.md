@@ -25,6 +25,7 @@
 
 - **What is closure?**
   - *"a technique for implementing lexically scoped name binding"*
+  - essentially,
 
 - **What are closures?**
   - *"a piece of code that carries its creation context around with it"*
@@ -42,6 +43,7 @@
 - **What are blocks used for? Give examples of specific use cases**
   - deferring implementation to the time of invocation of a method; to do this, we write methods that are general purpose and can specify implementation details in our blocks/procs at the time of invocation
   - alternatively, we use blocks to do sandwich operations (setup -> |block| -> teardown),
+    - a 'before' and 'after' effect; we can use blocks to implement the desired functionality and we can capture some state information and after
 
 
 - **How do we write methods that take a block? What errors and pitfalls can arise from this and how do we avoid them?**
@@ -70,27 +72,47 @@
   - the Gemfile is where we specify the gems we are planning to use along with a source and a ruby version for the directory within which the file exists.  Bundler uses the gemfile to establish the development environment: downloading/updating gems, ensuring everything talks to everything else, as well as generating a Gemlockfile that goes into more detail re: dependancies/version/etc.
 - **Are there advantages to using the unary `&` when invoking a method with a block over just creating a proc object and passing it as a normal parameter (e.g. not prefixed by `&`)?  Explore the possible trade-offs with a code example.**
 
+- **What are the benefits of explicit blocks?**
+
+- **What is the mechanism by which proc objects retain the artifacts present in their context of origin?**
+
+- **Can lambdas be passed implicitly?**
+
 # blocks
-- ~ to anonymous functions;
+- ~ to anonymous functions; a syntactic structure that can be passed around if stored in a proc object
 # closures
+- retain a memory of the surrounding scope when created; retains memory of what was in scope at the time of creation
 # binding
+  - encapsulates the execution context at some particular place; so when we create a proc object, the binding pertaining to that context is the mechanism by which the block
 # scope
 # why/when blocks
+- we would favor using a block when we are only passing it as an argument onces or so; repeating this more than once would violate the DRY principle since we would be writing the same code multiple times for multiple method invocations with the same block
+- they're a very 'ruby' way of implementing closures; the others (procs/method objects/lambdas) are more similar with how many other languages implement closures
 # blocks and variable scope
+- blocks have access to the local variables initialized in the enclosing scopes to where the block exists (meaning that if we have nested blocks or something of that nature, our inner most block has access to local variables initialized in the outermost lexical scope)
+- implemented through bindings
 # methods using blocks/procs
+- all methods can be invoked with blocks; they can all take blocks implicitly
+  - if we pass a block to a method implicitly and that method's implementation contains a `yield`; the block with be evaluated/invoked (?). However, if our method's implementation contains a `yield` and we don't pass that method a block, ruby will throw a `LocalJumpError` exception
+- depending on the desired behavior, we can p
 # explicit block parameter
+
 # return values with blocks
 # passing blocks
 # unary &
 # arity
+
 # minitest
 # minitest v rspec
+- both are ways to do testing in ruby; minitest using ruby syntax while rspec uses a (DSL) that reads like plain english.  Assert-style vs Describe-style.  Conceptually they achieve the same goal: writing tests for our code
 # testing terms
 # SEAT
 # assertions
 # packaging code
 # core tools purpose
+- ruby version control (rbenv), managing dependancies in a development environment (bundler/gemfile), automating common tasks (rake),
 # gemfiles
+- where we specify the gems we are planning to use along with a source and a ruby version for the directory within which the file exists.
 # regex
 
 
