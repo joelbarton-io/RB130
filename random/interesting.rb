@@ -1,4 +1,4 @@
-require 'pry'
+# require 'pry'
 # frozen string literal
 
 # def test
@@ -346,6 +346,7 @@ Demonstrate the concept with a code example.
 # p something.binding.local_variables
 # my_proc.call('hi')
 
+
 # -------------------eval/returning lambdas------------------- #
 
 # def multiply_by(n)
@@ -363,12 +364,239 @@ Demonstrate the concept with a code example.
 
 # -------------------returning a block------------------- #
 
-def block_returner(string)
-  proc { puts string }
+# def block_returner(string)
+#   proc { |el| puts string * el }
+# end
+
+# string = "I'm in a block! "
+# my_proc = block_returner(string)
+# p my_proc[3]
+
+
+# -------------------to_sym------------------- #
+# def a_method
+#   local_var = 'value'
+# end
+
+# arr = [1, 2, 3, 4]
+# ope = ['+', '-', '*', '/']
+
+# p proc { |el| el * 3 }.binding.local_variables
+
+# p binding.eval("arr")
+
+
+# -------------------PRACTICE QUESTIONS------------------- #
+
+# 16, What does & do when in a the method parameter? -> converts var to proc obj
+
+# def method(&var); end
+
+# 17, What does & do when in a method invocation argument? -> converts var to a block
+
+# method(&var)
+
+# 18, What is happening in the code below?
+
+# arr = [1, 2, 3, 4, 5]
+
+# p arr.map(&:to_s) # specifically `&:to_s` -> we are calling to_proc on the symbol, which then converts the new proc to a block obj
+
+# 19, How do we get the desired output without altering the method or the method invocations?
+
+# def call_this
+#   yield(2)
+# end
+# to_s = proc { |el| el.to_i }
+# to_i = proc { |el| el.to_s }
+
+# p call_this(&to_s) # => returns 2
+# p call_this(&to_i) # => returns "2"
+
+#****************************************************************# 20, How do we invoke an explicit block passed into a method using &? Provide example.
+
+# def a_method(&block)
+#   block[]
+# end
+
+# a_method { puts 'hi' }
+
+
+# 21, What concept does the following code demonstrate? -> sandwich code
+
+# def time_it
+#   time_before = Time.now
+#   yield
+#   time_after = Time.now
+#   puts "It took #{time_after - time_before} seconds."
+# end
+
+# 22, What will be output from the method invocation block_method('turtle') below? Why does/doesn't it raise an error?
+
+# def block_method(animal)
+#   yield(animal)
+# end
+
+# block_method('turtle') do |turtle, seal|
+#   puts "This is a #{turtle} and a #{seal}."
+# end
+# => 'This is a turtle and a ' -> non-strict arity for blocks/procs!
+
+
+# 23, What will be output if we add the follow code to the code above? Why? -> NameError bc block was not defined to take any arguments, unless we define an 'animal' lv or method in the lexical scope of the block, an error will be thrown
+
+# animal = 'goat'
+# block_method('turtle') { puts "This is a #{animal}." }
+
+
+# 24, What will the method call call_me output? Why?
+
+# def call_me(some_code)
+#   some_code.call
+# end
+
+# name = "Robert"
+# chunk_of_code = proc { puts "hi #{name}" } # create a procedure obj, `name` is part of the closure's binding since it was initialized before the creation of the proc/block.  the value of name is then reassigned to `Griffin`.
+# name = "Griffin"
+
+# call_me(chunk_of_code) # here we pass the proc `chunk_of_code` as an argument to `call_me`, where we invoke `call` upon the proc, executing the block stored within, which outputs to the screen `hi Griffin`.
+
+# 25, What happens when we change the code as such:
+
+# def call_me(some_code)
+#   some_code.call # when we try to call the block inside the proc obj, a NameError will be thrown since `name` was initialized after the creation of the proc and as such is not part of the closure's binding.
+# end
+
+# chunk_of_code = Proc.new {puts "hi #{name}"}
+# name = "Griffin"
+
+# call_me(chunk_of_code)
+
+# 26, What will the method call call_me output? Why?
+
+# def call_me(some_code)
+#   some_code.call
+# end
+
+# name = "Robert"
+
+# def name
+#   "Joe"
+# end
+
+# chunk_of_code = Proc.new {puts "hi #{name}"}
+
+# call_me(chunk_of_code) # outputs `hi Robert`; lv have a higher precedance than methods, therefore the `name` local variable is found first and is what is referenced on line 487. To be clear, both the lv `name` and the method `name` are a part of the closure's binding.
+
+# 27, Why does the following raise an error?
+
+# def a_method(pro)
+#   pro.call
+# end
+
+# a = 'friend'
+# a_method(&a) # because we attempt to invoke `to_proc` upon the string object referenced by lv `a`; you can't convert a string object to a proc object. prepended to an argument within a method invocation, `&` expects the argument to be a proc object since it wants to convert the expected proc into a standard block.  Since the object referenced by `a` is a string, `&` tries to invoke `to_proc` upon in but fails since that method isn't available to instances of the String class.
+
+# ****************************************************************28, Why does the following code raise an error?
+
+# def some_method(&block)
+#   yield if block_given?
+# end
+
+# bl = proc { puts "hi" }
+
+# p some_method(&bl) # because we try to assign a local variable to a block structure on 506.  Blocks are not objects and can therefore not be directly referenced by a variable.  If we want to be able to reference (and thus pass around some chunk of code; the block), we need to encapsulate that block inside a proc object. We could modify the code to make this work by prepending "proc" to the {...} on line 506 and prefix the `bl` with a `&` and adding a `yield if` before `block_given?` on line 503 as well as prefixing a `&` to `block` within the method definition.
+
+
+
+# ********************************29, Why does the following code output false?
+
+# def some_method(block)
+#   block_given? # no block is given since `block` points at the proc object initialized on line 518 so `block_given?` returns `false`
+# end
+
+# bloc = proc { puts "hi" } # create proc object
+
+# p some_method(&bloc) # pass the return value of invoking `some_method(bloc)` to `p`.
+
+# ********************************30, How do we fix the following code so the output is true? Explain
+
+# def some_method#(block)
+#   block_given? # we want this to return `true`
+# end
+
+# bloc = proc { puts "hi" } # do not alter this code
+
+# p some_method(&bloc) # unary & converts the proc obj to a basic block which some_method is passed, since it's a block now, block_given? returns `true`
+
+
+# 31, How does Kernel#block_given? work?
+
+# `block_given?` returns `true` if `yield` would execute a block in the context of where `block_given?` is invoked.
+
+
+# 32, Why do we get a LocalJumpError when executing the below code? & How do we fix it so the output is hi? (2 possible ways)
+
+# def some(block)
+#   yield
+# end
+
+# bloc = proc { p "hi" } # do not alter
+
+# some(bloc) # error because we aren't actually passing a block to the `some` method invocation. Since we defined our method with a `Yield` and since `yield` expects a block, an exception will be raised since yield doesn't have a block to yield to.
+
+
+# 33, What does the following code tell us about lambda's? (probably not assessed on this but good to know)
+
+# bloc = lambda { p "hi" }
+
+# bloc.class # => Proc
+# bloc.lambda? # => true
+
+# new_lam = Lambda.new { p "hi, lambda!" } # => NameError: uninitialized constant Lambda
+
+# lambda isn't a class in ruby, it's a type of `proc` that has strict arity enforcement
+
+# 34, What does the following code tell us about explicitly returning from proc's and lambda's? (once again probably not assessed on this, but good to know ;)
+
+# def lambda_return
+#   puts "Before lambda call."
+#   lambda {return}.call # simply returns from
+#   puts "After lambda call."
+# end
+
+# def proc_return
+#   puts "Before proc call."
+#   proc {return}.call # returning from a block encapsulated by a proc returns to main (effectively ending whatever method that proc object is being executed in)
+#   puts "After proc call."
+# end
+
+# lambda_return #=> "Before lambda call."
+#               #=> "After lambda call."
+
+# proc_return #=> "Before proc call."
+
+=begin
+# 35, What will #p output below? Why is this the case and what is this code demonstrating?
+
+def retained_array
+  arr = []
+  Proc.new do |el|
+    arr << el
+    arr
+  end
 end
 
-string = "I'm in a block!"
+arr = retained_array
+arr.call('one')
+arr.call('two')
+p arr.call('three')
+=end
+# ------------------------------------------------------------ #
+# explicit args
+%w[test me please].each { |str| puts str.upcase } # prints TEST, ME, PLEASE
+(1..5).map { |i| p i**2 } # => [1, 4, 9, 16, 25]
 
-my_proc = block_returner(string)
-
-my_proc.call
+# implicit args
+%w[test me please].each { puts _1.upcase } # prints TEST, ME, PLEASE
+(1..5).map { _1**2 } # => [1, 4, 9, 16, 25]
