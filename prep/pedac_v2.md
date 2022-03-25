@@ -1,8 +1,8 @@
 +---------------------------------------------------+
-| **[00-]** "read every line SLOWLY"                |
-1. state the i/o                                    |
-2. clarify keywords and confusing concepts          |
-3. restate the question in my own words             |
+| **[00-]** "survey testing suite SLOWLY"           |
+1. read prompt; rewrite question/goal of exercise   |
+2. read all the tests; identify edge cases          |
+3. write down explicit requirements                 |
 4. figure out implicit requirements from testcases  |
 +---------------------------------------------------+
 | >>>>> "do I fully UNDERSTAND the question?" <<<<< |

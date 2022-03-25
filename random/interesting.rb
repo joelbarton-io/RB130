@@ -592,11 +592,345 @@ arr.call('one')
 arr.call('two')
 p arr.call('three')
 =end
-# ------------------------------------------------------------ #
+# ------------------------------weird; alternate syntax for block arguments------------------------------ #
 # explicit args
-%w[test me please].each { |str| puts str.upcase } # prints TEST, ME, PLEASE
-(1..5).map { |i| p i**2 } # => [1, 4, 9, 16, 25]
+# %w[test me please].each { |str| puts str.upcase } # prints TEST, ME, PLEASE
+# (1..5).map { |i| p i**2 } # => [1, 4, 9, 16, 25]
 
-# implicit args
-%w[test me please].each { puts _1.upcase } # prints TEST, ME, PLEASE
-(1..5).map { _1**2 } # => [1, 4, 9, 16, 25]
+# # implicit args
+# %w[test me please].each { puts _1.upcase } # prints TEST, ME, PLEASE
+# (1..5).map { _1**2 } # => [1, 4, 9, 16, 25]
+# ---------------------------------*********------------------------------- #
+# ---------------------------------SB quiz 1------------------------------- #
+# ---------------------------------*********------------------------------- #
+
+##  0 What is closure?
+
+
+##  1 What are closures?
+
+
+# in ruby closures take the form of blocks, procs, lambdas, and method objects. Essentially, a closure is a chunk of code that retains memory of the environment where it was first defined.  This includes the artifacts of the environment (method definition names, variable names and their values, etc...); it has access to these artifacts even when the procedure object is in a different environment or execution context from where it was created.
+
+##  2 What is a binding in relation to closures?
+
+
+# when we create a proc object, that objects holds on to the bindings of all the variables used by the proc object's encapsulated block; if the block uses an artifact in its scope of creation, then the binding for that artifact is held by the proc object.
+# Technically, **all** references are carried around by the proc, even if they aren't actually used by the chunk; the bindings are still accessible
+
+##  3 How do you create a closure in Ruby?
+
+# we can create closures by encapsulating a chunk of code inside a proc object; closure can occur whenever we use a chunk of code in a context other than where that chunk of code was originally defined.
+
+##  4 When should you write a method that takes a block?
+
+# writing a method that takes a block is the right thing to do when we want to defer specific implementation details until
+# the time of invocation.  we can write a generic method that yields to a block, the details of which we aren't concerned with
+# while we are defining the method.
+
+# additionally, we sometimes want to perform some sort of before/after procedure upon some data.  yielding to a block between
+# parts of our code is a practice called 'sandwich code' and allows us to perform some sort of operation, then yield to the block,
+# then perform some other, related operation following the yielding to the block.
+
+##  5 What kinds of methods can take a block? standard vs custom? -> all methods can take a block. (implicit block passing)
+
+##  6 Provide an example of a method definition, calling object, block, and method invocation
+
+# def a_method(arr) # method definition
+#   arr.map { yield(_1) }
+# # ^calling object
+# end
+
+# # method invocation
+# p a_method([1, 2, 3]) { |el| el * 3 }
+# #                     ^block        ^
+
+
+##  7 You are writing a #welcome method that takes one argument, a string that denotes a greeting, and a block that returns a string. The method must output the argument value followed by a space, (if the block is given) the value returned by the block. Fix the method.
+
+# def welcome(str)
+#   p str + ' ' + yield
+# end
+
+# welcome('Hello') { 'there' } # => Hello there
+# welcome('Hey') { 'Joe' } # => Hey Joe
+
+
+##  8 What do we know about block parameters and the number of arguments passed to a block? What is this called?
+# normal proc objects and blocks have relaxed rules about the require number of arguments being passed.  Lambdas have strict rules (much like methods) and enforce strict arity.
+
+
+##  9 What does the following error mean?
+# LocalJumpError: no block given (yield) -> this means that we defined a method to yield to a block that was never passed to the method
+
+##  10 What is the method block_given? " "
+# what does block_given? do -> checks if a yield in the current context would execute a block
+# what class is it a method from? -> Kernel
+# what output does it have? -> boolean
+
+##  11 In method definition what does & do in front of an argument?
+
+# def true_or_false(&block) # -> transforms arg into a basic proc object (P  arameter -> P  roc)
+#   puts "The block is #{block.call}"
+# end
+
+# true_or_false { 5 > 8 }
+
+##  12 What will the following code output and what is included in the binding on line `5`?
+
+# def call_chunk(code_chunk)
+#   code_chunk.call
+# end
+
+# say_color = Proc.new { puts "The color is #{color}" } # NameError thrown
+# color = "blue" # must be initialized before closure event
+# call_chunk(say_color)
+
+##  13 In the following code there is &:capitalize. What is this code doing and what does it demonstrate?
+# "the cat in the hat".split.map(&:capitalize).join(' ') # => "The Cat In The Hat"
+
+# & transforms the :capitalize symbol (a reference to the capitalize method) to a proc by calling to_proc upon it, this proc is then converted to a simple block when is then yielded to by the iterator for each successive element in the collection
+
+
+##  14 What is the expanded code for the following example?
+# [2, 3, 5].inject(1, &:+)
+
+# [2, 3, 5].inject(1) { |memo, curr| memo + curr }
+
+##  15 Which names are part of the binding for the block body on line 12?
+
+# ARRAY = [1, 2, 3]
+
+# def abc
+#   a = 3
+# end
+
+# def xyz(collection)
+#   collection.map { |x| yield x }
+# end
+
+# xyz(ARRAY) do
+#   # block body
+# end
+
+# ------------------------question------------------------ #
+# In the below code we have two local variables, one of which is referenced (used) in the block encapsulated in the proc object.  My question: is the binding for var_two held by the proc object even though it
+# def a_method(prc_obj)
+#   prc_obj.call(3)
+# end
+
+# var_one = 5
+# var_two = 10 # <- no reference to this var in the below...
+
+# my_proc = proc { |exp| var_one ** exp }
+# a_method(my_proc) # => 125
+# It would seem that it is, since when we call binding.eval("var_two") upon the passed in proc_obj, we can access the object that it was pointing at.
+# def a_method(prc_obj)
+#   prc_obj.binding.eval("var_two")
+# end
+
+# var_one = 5
+# var_two = 10 # <- ?
+
+# my_proc = proc { |exp| var_one ** exp }
+# a_method(my_proc) # => 10
+
+
+# ---------------------------------------------------------------- #
+# def a_method
+#   'hi'
+# end
+
+# def other_method()
+#   puts 'hello there!'
+# end
+
+# def main_method(prc)
+#   prc.call
+# end
+
+# var = 'some text'
+
+# greeting_1 = method(:a_method).to_proc
+# greeting_2 = method(:other_method).to_proc
+
+# my_proc = proc { puts var }
+
+# p binding.local_variables
+# # main_method(my_proc)
+
+# ---------------------------------*********------------------------------- #
+# ---------------------------------SB quiz 2------------------------------- #
+# ---------------------------------*********------------------------------- #
+
+
+## 1 What are regression tests and why are they useful?
+# -> regression tests are tests designed to ensure that once we make a changes our code still works as intended (e.g. our new addition doesn't break the existing code).  They allow us to build up our code while being confident that newly-added material doesn't cause any substantial issues to the healthy running of our code.
+
+
+## 2 Define an Assertion, Test, and Test Suite
+# "test" : context within which tests are run; can contain multiple assertions; "test suite" : all the tests that accompany a project; "assertion" : actual verification step; "did we get what we expected?"; a test contains one or more
+
+
+## 3 Compare and Contrast RSpec and Minitest
+# Rspec is a DSL (domain specific language) that uses the 'expect'-style syntax. It is written in plain english and is very popular. Minitest uses normal Ruby syntax, is included in the Ruby Core/Standard library, uses 'assert' style syntax, and does much of what RSpec can do via additional gems and extensions.  Is known as being more simple to use and thus more beginner friendly.
+
+
+## 4 - 5 What is SEAT?
+# Seat is basically just an approach for writing and implementing tests. We setup, execute our code, evaluated there result, then tear down any artifacts that need to be cleaned up.
+
+
+## 6 What happens specifically in the set up and tear down steps?
+# in setup, we create any objects we will use in our execution and assertion steps.  In tear down, we clean up any remaining artifacts ought to not exist anymore.
+
+
+## 7 What method does assert_equal use?
+# assert_equal invokes the `==` method defined for the expected object/value and compares it with the actual object. This
+
+
+## 8 What do you need to do to run minitest? (What do you need to include on the test file?)
+# require 'minitest/autorun', require_relative 'name_of_file_to_test'. We also need to subclass our testing class from Minitest::Test, we might also require 'minitest/reporters' and enable them.
+
+
+## 9 -14 Define these common assertions and how to use them
+# assert -> the expression that follows assert will be evaluated; assert will pass if the expression evaluates to truthy
+# assert_match -> matches an expected regexp with the actual string value
+# assert_raises -> makes sure an exception is raised when a certain event occurs
+# refute -> inverse to assert; basically !assert (expression)
+# assert_equal -> compares equality based on the class of expected object
+
+## 10
+## 11
+## 12 Will test_is_not_purrier pass or fail or have an error?
+
+# You update the initialize method of your Cat class to take a second argument and assign it to a @purr_factor instance variable. You also add an equivalent attr_accessor.
+# require 'minitest/autorun'
+
+# class Cat
+#   attr_accessor :name, :purr_factor
+
+#   def initialize(name, purr_factor)
+#     @name = name
+#     @purr_factor = purr_factor
+#   end
+
+#   def miaow
+#     "#{name} is miaowing."
+#   end
+# end
+
+# class CatTest < MiniTest::Test
+#   def setup
+#     @kitty = Cat.new('Kitty', 3)
+#   end
+
+#   def test_is_cat; end
+
+#   def test_name
+#     @milo = Cat.new('Milo', 3)
+#     assert_equal(@milo.name, @kitty.name)
+#   end
+
+#   def test_miaow; end
+
+#   def test_raises_error; end
+
+#   def test_is_not_purrier
+#     patch = Cat.new('Patch', 5)
+#     milo = Cat.new('Milo', 3)
+
+#     refute(patch.purr_factor > milo.purr_factor) # -> exp evaluates true, so test fails
+#   end
+# end
+
+
+## 13 What does this output mean?
+# CatTest .FS. -> two passes, one fail, one skip
+
+## 14 Given the following output what implementation of #test_name assertion would produce this output?
+#   1) Failure:
+# CatTest#test_name [minitest_test.rb:21]:
+# Expected: "Milo"
+#   Actual: "Kitty"
+
+## 15 What is code coverage? -> essentially it's the amount of code that your test suite touches once you've run all your tests.  It's often good to strive for 100% coverage, but this is in no way means that you're code won't have bugs or that the tests you've written cover every possible edge case.  Still a good habit to get into trying to reach 100 percent coverage starting out.
+
+
+
+# ---------------------------------*********------------------------------- #
+# ---------------------------------SB quiz 3------------------------------- #
+# ---------------------------------*********------------------------------- #
+
+## 1 Define the following tools.
+## 2
+## 3
+## 4
+# RubyGems -> a repository where all RubyGems live and can be sourced from
+# Bundler -> a gem that ensures all the necessary dependencies are loaded in order to execute associated ruby code.
+# RVM -> ruby version manager; ensures that we are using the correct version
+# Rake -> a gem we use to automate common tasks like tests, etc...
+# Rbenv -> another version manager
+
+## 5 What file would have the following code?
+# GEM -> Gemfile.lock
+#   remote: https://rubygems.org/
+#   specs:
+#     mustermann (1.0.0)
+#     pg (0.21.0)
+#     rack (2.0.3)
+#     rack-protection (2.0.0)
+#       rack
+#     sequel (4.48.0)
+#     sinatra (2.0.0)
+#       mustermann (~> 1.0)
+#       rack (~> 2.0)
+#       rack-protection (= 2.0.0)
+#       tilt (~> 2.0)
+#     tilt (2.0.7)
+
+# PLATFORMS
+#   ruby
+
+# DEPENDENCIES
+#   pg (~> 0.21.0)
+#   sequel (~> 4.48)
+#   sinatra (~> 2.0)
+
+# RUBY VERSION
+#   ruby 2.6.3
+
+# BUNDLED WITH
+#   1.15.1
+
+## 6 What file would have the following code?
+# source 'https://rubygems.org' -> Gemfile
+
+# ruby '2.6.3'
+
+# gem 'sinatra', '~> 2.0'
+# gem 'postgres', '~> 0.8.1'
+# gem 'sequel', '~> 4.48'
+# gem 'minitest', '~> 5.10'
+# gem 'minitest-reporters', '~> 1.1'
+# gem 'rake', '~> 12.0'
+
+# gemspec
+
+## 7 What file would have the following code? -> Rakefile
+# desc 'Run tests'
+# task :test do
+#   sh 'ruby ./test/my_app_test.rb'
+# end
+
+# desc 'Run tests'
+# task :default => :test
+
+## 8 Where do Gemfile and Gemfile.lock come from? Which tool are they used with?# used by Bundler, when we bundle install, a gemfile.lock is created from Gemfile containing a bunch of dependancy related information as well as the version of ruby to use, etc...
+## 9 What are they?
+
+## 10 How do you create a Gemfile.lock? -> run bundler install
+
+## 11 How do you fix the following error?
+# ruby my_app.rb
+# Gem::LoadError: You have already activated rake 11.3.0, but your Gemfile requires rake 10.4.2. bundler exec rake
+
