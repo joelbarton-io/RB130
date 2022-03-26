@@ -9,9 +9,9 @@
     - problem solving with code
     - refactoring
     - reading code
-  - [] refactor 10 of them
+  - [] refactor 10 of them (pending)
 
-- [] review basic assertions/testing syntax + preferred practices
+- [D] review basic assertions/testing syntax + preferred practices
 - [] how the various core tools work together; benefits/purpose
 - [] come up with some conceptual questions (:pending)
 

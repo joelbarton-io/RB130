@@ -1,5 +1,5 @@
 # refresher
-- local variables look like method invocations sometimes'
+- local variables look like method invocations sometimes
 - always be aware of where a local variable is initialized; this determines its scope!
 
 ```ruby

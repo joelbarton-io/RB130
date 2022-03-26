@@ -261,9 +261,7 @@ calls `to_proc` on the object referenced by that method parameter
 # -------------------for chris------------------- #
 
 =begin
-What core computer science concept affords us the ability to both reference and access the value
-of a local variable initialized within the scope of a method *after* a method has returned?
-Demonstrate the concept with a code example.
+What core computer science concept affords us the ability to both reference and access the value of a local variable initialized within the scope of a method *after* a method has returned?Demonstrate the concept with a code example.
 =end
 
 # def math_operation(n)
@@ -365,7 +363,7 @@ Demonstrate the concept with a code example.
 # -------------------returning a block------------------- #
 
 # def block_returner(string)
-#   proc { |el| puts string * el }
+#   Proc.new(&) { |el| puts string * el }
 # end
 
 # string = "I'm in a block! "
@@ -934,3 +932,10 @@ p arr.call('three')
 # ruby my_app.rb
 # Gem::LoadError: You have already activated rake 11.3.0, but your Gemfile requires rake 10.4.2. bundler exec rake
 
+# def a_method
+#   Proc.new
+# end
+
+
+# question_mark = a_method { puts 'hi' }
+# question_mark[]

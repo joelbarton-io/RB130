@@ -29,7 +29,8 @@
 
 - **What are closures?**
   - *"a piece of code that carries its creation context around with it"*
-
+  - 3 ways to create a closure
+  
   - implemented through the use of blocks and proc objects
     - a local variable must be initialized before the block/proc for it to be part of the block/proc's binding
     - on the other hand, methods (and their names) can be declared after a block chunk and will be part of the binding (unless they are defined below where the block/proc is used)
@@ -114,8 +115,6 @@
 # gemfiles
 - where we specify the gems we are planning to use along with a source and a ruby version for the directory within which the file exists.
 # regex
-
-
 
 
 
