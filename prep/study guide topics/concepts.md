@@ -25,18 +25,18 @@
 
 - **What is closure?**
   - *"a technique for implementing lexically scoped name binding"*
-  - essentially,
+  - essentially, when we write a block of code, the artifacts of the enclosing scope of that block are part of the binding of that chunk of code.  Depending on the type of artifact and if the block needs to access the referenced value, the visibility of the variable is determined by the type and the location in code.
 
 - **What are closures?**
   - *"a piece of code that carries its creation context around with it"*
-  - 3 ways to create a closure
-  
+  - 3 (4) ways to create a closure -> blocks, procs, lambdas, and method objects
+
   - implemented through the use of blocks and proc objects
-    - a local variable must be initialized before the block/proc for it to be part of the block/proc's binding
+    - a local variable must be initialized before the block/proc for it to be part of the block/proc's binding* (except this isn't true)
     - on the other hand, methods (and their names) can be declared after a block chunk and will be part of the binding (unless they are defined below where the block/proc is used)
 - **What are blocks?**
   - a syntactic structure that we can pass to methods as an argument or store as part of a proc object's state
-  - serve as anonymous functions; carry around the references (artifacts) present where they are first instantiated (?)
+  - serve as anonymous functions; hold and carry around the name references (artifacts) present where they are first instantiated (?)
 - **What are Procs and lambdas? How are they different?**
   - procs and lambdas are the containers where we store anonymous functions; they serve to encapsulate behaviors, these behaviors carry with them the references present in their lexical scope
 - **How do closures interact with variable scope?**
@@ -62,9 +62,9 @@
 - **How do we specify a block argument explicitly?**
   - unary `&` in the method definition; passed as the last argument to a method (a must!)
 - **How can we return a Proc from a method or block?**
-  - have that proc object or some reference be the last line of code evaluated within a method implementation
+  - have that proc object or some reference be the last line of code evaluated within the method implementation
 - **What is arity? What kinds of things in Ruby exhibit arity? Give explicit examples.**
-  - the level of strictness with which a method's parameter/argument count is enforced.  Strict arity (lambdas, methods) requires that the number of arguments used to invoke a method match the number that the method/lambda was defined to take.  Lenient arity (blocks/procs) let things play out; they can still be used/invoked without the correct number of arguments.  If a block parameter isn't passed but it is referenced in the block/proc implementation, it just points at `nil`
+  - the level of strictness with which a method's parameter/argument count is enforced.  Strict arity (lambdas, methods) requires that the number of arguments used to invoke a method match the number the method/lambda was defined to take.  Lenient arity (blocks/procs) let things play out; they can still be used/invoked without the correct number of arguments.  If a block parameter isn't passed but it is referenced in the block/proc implementation, it just points at `nil`
 - **How do methods and blocks return chunks of code (closures)?**
 
 - **Why is it necessary to use `block_given?` within a method that isn't explicitly defined to take a block?**

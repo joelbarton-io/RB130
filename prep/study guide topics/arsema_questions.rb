@@ -80,3 +80,7 @@ p arr.map(&add_one)
 
 # ----------------------------------10---------------------------------------- #
 ## Why are blocks useful?  What benefits do they grant us? (very open-ended)
+
+
+# ----------------------------------11---------------------------------------- #
+## Are there advantages to using the unary `&` when invoking a method with a block over just creating a proc object and passing it as a normal parameter (e.g. not prefixed by `&`)?  Explore the possible trade-off(s) with a code example.
