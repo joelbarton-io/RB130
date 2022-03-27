@@ -939,3 +939,15 @@ p arr.call('three')
 
 # question_mark = a_method { puts 'hi' }
 # question_mark[]
+
+
+
+def introduce_yourself(introduction)
+  me = "Joel"
+  introduction.call
+  introduction.call(me)
+end
+
+me = "Arsema"
+my_bit = Proc.new { |me| puts "Hello, my name is #{me}." }
+introduce_yourself(my_bit)

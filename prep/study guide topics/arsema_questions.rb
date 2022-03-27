@@ -88,3 +88,15 @@ p arr.map(&add_one)
 
 # ----------------------------------12---------------------------------------- #
 ## What's the relationship between the Bundler gem and a project's Gemfile?
+
+
+## Without running the code, describe the output from the below. Describe in detail what mechanism(s) is/are at play that account for the discrepancy.
+def introduce_yourself(introduction)
+  me = "Joel"
+  introduction.call
+  introduction.call(me)
+end
+
+me = "Arsema"
+my_bit = Proc.new { |me| puts "Hello, my name is #{me}." }
+introduce_yourself(my_bit)

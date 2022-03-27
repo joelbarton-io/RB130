@@ -1,0 +1,48 @@
+1. A closure is concept that in ruby is implemented through blocks, procs, and lambdas.  Essentially, it's the idea that when we define a block, that block has access to its surrounding environment.  If we were to represent a block in the form of a proc object and passed that proc object to a method, that proc object would carry with it the artifacts (e.g. local variable names, constants, method names, etc.) that existed in the surrounding environment where that block was defined. When we package up a chunk of code and represent it as a proc object, it retains memory of it's context of origin: wherever that block was defined.
+
+2. On lines 5 & 6 we initialize two array objects and reference them with `arr` and `results`. On line 8, we invoke `for_each_in` passing in one named argument (the 4 element array referenced by `arr`) and implicitly pass as an argument a block (the code between the `do` and the `end` keywords).
+
+
+3. Ruby implements closures in three primary ways.  Blocks, Procs, and Lambdas.  Both procs and lambdas are proc objects while blocks are syntactic structures.  Another way to understand their relationship might be to say that when we create a proc object (either a basic proc or a lambda), that object represents the block with which it is defined; since it's an object (the proc or lambda) we can assign a local variable to reference it.  This would not be possible without procs since blocks are just syntactic structures and not objects.  You could also say that a proc object **encapsulate** the block with which it was created with.
+
+4. " "
+
+5. On line 13 we invoke the `alphabet` method (the structure defined from line 1-9) and assign the return value to the local variable `alpha1`.  On line 14, we pass `p` the proc object referenced by `alpha1` which outputs an encoding of that object. On line 16, we invoke the `call` method upon the proc object referenced by `alpha1` which executes the chunk of code represented by that proc object leading to the local variable `counter` to be incremented by 1 and the letter `a` to be returned on line 16. The process repeats on line 17, `counter` is incremented by 1 and the letter `b` is returned by the `call` method invocation.
+
+On line 19, we again invoke the `alphabet` method and assign the proc object it returns to `alpha2`.  At this point, local variables `alpha1` and `alpha2` reference **distinct** proc objects; they are **NOT** the same object.  Thus when we invoke `call` twice upon the proc object referenced by `alpha2`, the return values from these executions match the pattern of the preceeding invocations upon the proc object referenced by `alpha1`. Then, on line 24 we invoke `call` upon the proc object referenced by `alpha1` which once again, increments `count` by 1 and returns the letter `c`.
+
+********************************
+
+6. How closures work seems to violate the scoping rules of a local variable since when we define a block structure and represent it with a proc object, that object carries with it *some* of the artifacts located in the scope where that object was initialized (the specifics of which rely upon the specific implementation of the closure).  In a sense, through closure, we are extending the "lifespan" of local variables beyond their scope of origin allowing them to be referenced and their values manipulated in scopes beyond where they were defined. This is the behavior that seems to violate the scoping rules of local variables however is essential to the workings of the procs and blocks.
+
+7. The code outputs `"Hi my name is Sir John"`. On line 5, we initialize local variable `title` and assign it to the string `"Mr. John"`. On line 7, we create a proc object and assign local variable `display` to the proc.  Since local variable `title` was initialized prior to the creation of the aforementioned proc, `title` can be directly referenced within the block that was used in the creation of the proc, as is seen on line 7.  On line 9, we reassign `title` to point at a different string object `"Sir John"`. On line 11, we invoke `introduction` passing the proc object referenced by `display`. In the implementation of `introduction` we invoke `call` upon the passed-in proc object referenced by method parameter `name` (a local variable), which prints the string `"Hi my name is Sir John"` and returning `nil`. The outputted string is `"Hi my name is Sir John"` and not `""Hi my name is Mr. John"` because prior to the `introduction` method invocation, we reassigned `title` to a new string; this reassignment is thus evident in the resulting code execution.
+
+8. If we pass a block to a method invocation implicitly, the method's implementation must have a `yield` keyword contained within or a `LocalJumpError` will be thrown since while all methods in Ruby can be passed a block implicitly, not all methods are defined with a `yield` keyword. Depending on how the method is defined, passing it a block implicitly can affect the return value or output of the method, it just depends on the specific implementation details...
+```ruby
+def a_method # not defined with a way to yield to the passed block
+  puts 'hi'
+end
+
+def other_method
+  yield
+end
+
+a_method { puts 'hello' } # > LocalJumpError!
+other_method { puts 'hello' } # 'hello', => nil
+```
+
+9. ***If we define a block to take an argument, we grant more implementation control to the user of that block; they can pass in
+
+10. If we pass a simple block the wrong number of arguments, it will do its best, assigning `nil` to any unused block arguments or disguarding any excess values passed that it doesn't have a parameter for. Basic blocks and proc objects are said to have lenient arity, meaning that they can be passed a different number of arguments than they were defined to receive.  The other side of the equation is the implementation of the method-like proc objects known as lambdas which (like normal method) enforce strict arity; the number of arguments passed must match the number they were defined to take.
+
+11. On line 7, we invoke `before_and_after` passing in an integer `0` and an implicit block defined to take 1 argument. Upon invocation, method parameter `obj` references `0`.  On line 2, the string `"Before: 0"` is printed to the screen. Then, the method yields execution control to the implicit block, passing the block the integer `0` as an argument; block parameter `num` references `0` at this point. `0` is added to `5`, the sum of which is returned by the block and local variable `after` refernences this returned value from the block on line 3.  On line 4, the string `"After: 5"` is printed to the screen and `nil` is returned by the `before_and_after` method invocation from line 7.  The same sequence of events occurs upon invocation of `before_and_after` on line 9. Both invocations demonstrate a common use of blocks, Sandwich code.  This is essentially the idea that we have some data prior to the block execution.  In the first invocation, this is the value of `obj` which we can compare with the value of `after` (the captured return value of the block execution).  This is a beneficial use case for blocks and a common pattern of using blocks in this manner.
+
+12. In both of the invocations of `select_elements`, a block is passed as an implicit argument to the method. In the implementation of `select_elements`, local variables `result` and `counter` are initialized. We then enter a `while` loop, initializing `current_element` to the element in the supplied `array` at the index of the current value of `counter`. We use the return value from `yield`ing to the block with the current element in the supplied array in a conditional statement as defined on line 7.  If the return value from yielding to the supplied block is truthy, then the value of the `current_element` in the supplied `array` is pushed into the array referenced by `result`, otherwise the value of `counter` is incremented by 1 and the loop enters the next iteration of the while loop structure. Once the integer length of the `array` no longer exceeds the value of `counter`, the while loop ends executing and line 10 is evaluated.  `results` references an array object and as the last line of code evaluated in the method, its value is returned from the method.
+
+Line 13 returns an array containing the string elements `B, C, F`. Line 16 returns an array containing the integer elements `1, 3`.
+
+13. We define a method `yield_to_block` which is defined to `yield` to a supplied block however we never actually supply that implicit block when we invoke the method on line 7.  To fix this and achieve the desired output, all we must do is pass `yield_to_block` a block to `yield` to that has the desired implementation. Like this -> `yield_to_block { puts "Yes! A block was given during the method invocation." }`.
+
+14. One use case is using blocks in sandwich code. The other is to postpone the specific implementation details of a method invocation to the time of invocation.  If we define a method to yield to a supplied block, we can specify some specific implementation within the block we invoke the method with, thus granting more control to the point of invocation.  This sort of technique requires defining more general methods which can be used in a number of different ways and grants more flexible code.  Excellent examples of this are Ruby's iterators like `each`, `map`, and `select`.  All they are concerned with is, was I invoked upon a collection (e.g. something iterable) and leave the rest of the implementation details up to the block they are passed at the time of invocation.
+
+---> 1:14 <---
