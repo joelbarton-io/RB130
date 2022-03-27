@@ -99,11 +99,14 @@
 # explicit block parameter
 
 # return values with blocks
+- can be captured by a variable if we desire
 # passing blocks
+- implicit vs explicit passage
 # unary &
 # arity
 
 # minitest
+
 # minitest v rspec
 - both are ways to do testing in ruby; minitest using ruby syntax while rspec uses a (DSL) that reads like plain english.  Assert-style vs Describe-style.  Conceptually they achieve the same goal: writing tests for our code
 # testing terms

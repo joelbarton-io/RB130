@@ -84,3 +84,7 @@ p arr.map(&add_one)
 
 # ----------------------------------11---------------------------------------- #
 ## Are there advantages to using the unary `&` when invoking a method with a block over just creating a proc object and passing it as a normal parameter (e.g. not prefixed by `&`)?  Explore the possible trade-off(s) with a code example.
+
+
+# ----------------------------------12---------------------------------------- #
+## What's the relationship between the Bundler gem and a project's Gemfile?
