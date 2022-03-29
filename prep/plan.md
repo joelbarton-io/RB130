@@ -18,7 +18,7 @@
 # other
 
 - [] read chapter on procs/lambdas in TRPL
-- [] read blogs + forum post on as many subjects as possible
+- [D] read blogs + forum post on as many subjects as possible
 - [] re-read Core Tools book
 - [D] re-read blocks/procs refresher
 
@@ -33,5 +33,5 @@
 - [D] study with Garry 3-15
 - [D] study with Arsema and James 3-15
 - [D] study with Chris 3-16
-- [] study with Steve 3-17
-- [] study with others...
+- [X] study with Steve 3-17
+- [D] study with others...

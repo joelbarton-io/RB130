@@ -941,13 +941,42 @@ p arr.call('three')
 # question_mark[]
 
 
-
+# ------------------------for chris------------------------ #
+=begin
 def introduce_yourself(introduction)
   me = "Joel"
   introduction.call
   introduction.call(me)
 end
 
-me = "Arsema"
+me = "Chris"
 my_bit = Proc.new { |me| puts "Hello, my name is #{me}." }
 introduce_yourself(my_bit)
+=end
+
+
+
+# def a_method(prc)
+#   # p prc.binding.local_variables
+#   name = prc.call
+#   p prc.call(name)
+# end
+
+# name = 'Joel'
+# obj = proc { |name| name }
+# a_method(obj)
+
+require 'pry'
+
+def a_method(b) # converts to a proc object
+  yield
+  # if block_given?
+  b.call
+  # end
+  # binding.pry
+end
+
+a_method(&proc { p 'hi there' }) # converts to a block
+
+# What's the difference between `yield` and prc_name.call ??
+
