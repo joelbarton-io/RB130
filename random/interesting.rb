@@ -501,7 +501,7 @@ What core computer science concept affords us the ability to both reference and 
 #   yield if block_given?
 # end
 
-# bl = proc { puts "hi" }
+# bl = { puts "hi" }
 
 # p some_method(&bl) # because we try to assign a local variable to a block structure on 506.  Blocks are not objects and can therefore not be directly referenced by a variable.  If we want to be able to reference (and thus pass around some chunk of code; the block), we need to encapsulate that block inside a proc object. We could modify the code to make this work by prepending "proc" to the {...} on line 506 and prefix the `bl` with a `&` and adding a `yield if` before `block_given?` on line 503 as well as prefixing a `&` to `block` within the method definition.
 

@@ -92,16 +92,19 @@
 - **Can lambdas be passed implicitly?**
 
 # blocks
-- ~ to anonymous functions; a syntactic structure that can be passed around if stored in a proc object
+- a chunk of code that can either be encapsulated by a proc object or passed as an argument to a method invocation
+- one way that Ruby implements closures. Closures are a way to pass around an unnamed "chunk of code" to be executed later.
+- ~ to anonymous functions; a syntactic structure (chunk) that can be passed around if encapsulated in a proc object
 # closures
 - retain a memory of the surrounding scope when created; retains memory of what was in scope at the time of creation
 # binding
-  - encapsulates the execution context at some particular place; so when we create a proc object, the binding pertaining to that context is the mechanism by which the block
+  - encapsulates the execution context at some particular place; so when we create a proc object, the binding pertaining to that context is the mechanism by which the block retains memory of its surrounding context; those references were held by the binding of the block's closure
 # scope
 # why/when blocks
 - we would favor using a block when we are only passing it as an argument once or so; repeating this more than once would violate the DRY principle since we would be writing the same code multiple times for multiple method invocations with the same block
 - blocks allow us to defer implementation details to the moment of invocation.
 - they're a very 'ruby' way of implementing closures; the others (procs/method objects/lambdas) are more similar with how many other languages implement closures
+- *One use case is using blocks is sandwich code. The other is to postpone the specific implementation details of a method invocation to the time of invocation.  If we define a method to yield to a supplied block, we can specify some specific implementation within the block we invoke the method with, thus granting more control to the point of invocation.  This sort of technique requires defining more general methods which can be used in a number of different ways and grants more flexible code.  Excellent examples of this are Ruby's iterators like `each`, `map`, and `select`.  All they are concerned with is, was I invoked upon a collection (e.g. something iterable) and leave the rest of the implementation details up to the block they are passed at the time of invocation.*
 # blocks and variable scope
 - blocks have access to the local variables initialized in the enclosing scopes to where the block exists (meaning that if we have nested blocks or something of that nature, our inner most block has access to local variables initialized in the outermost lexical scope)
 - implemented through bindings
